@@ -79,7 +79,7 @@ label_size <- 2
 
 # 4. do plot 1 ---
 set.seed(123) # for reproducible label placement
-cumul_cases %>% 
+p1 <- cumul_cases %>% 
   filter(ymd >= start_date) %>%
   ggplot(aes(x=ymd, y=case_rate*1e6, group=name,
              color = ifelse(name %in% highlight_zips, name, 'exclude'),
@@ -103,10 +103,10 @@ cumul_cases %>%
   scale_color_manual(values = c('grey40', my_pal)) +
   theme_light(base_size = txt_size) +
   theme(legend.position = 'none')
-ggsave('images/ousd_covid_cumul.jpg', w=jpg$w, h=jpg$h, dpi=jpg$dpi)
+ggsave(p1, 'images/ousd_covid_cumul.jpg', w=jpg$w, h=jpg$h, dpi=jpg$dpi)
 
 # 5. do plot 2 ----
-cumul_cases %>% 
+p2 <- cumul_cases %>% 
   filter(ymd >= start_date & pop >= pop_min
          ) %>%
   ggplot(aes(x=ymd, y=new_cases_7_rate*1e6, group=name,
@@ -134,5 +134,5 @@ cumul_cases %>%
        subtitle = glue('Excluding zips below {pop_min} population'),
        y='cases per 100k pop',
        x='date')
-ggsave('images/ousd_covid_rate.jpg', w=jpg$w, h=jpg$h, dpi=jpg$dpi)
+ggsave(p2, 'images/ousd_covid_rate.jpg', w=jpg$w, h=jpg$h, dpi=jpg$dpi)
 

@@ -3,7 +3,7 @@ options(tigris_use_cache = TRUE)
 library(tigris)
 library(sf)
 
-# get shapefiles (coarse resolution)
+# get shapefiles (add cb=T for coarse resolution)
 sd_sf <- school_districts(state = 'CA')
 zip_sf <- zctas(state='CA')
 
