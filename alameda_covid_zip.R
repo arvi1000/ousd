@@ -68,10 +68,12 @@ top_zips <- cumul_cases %>%
   filter(ymd == max(ymd)) %>%
   arrange(-case_rate)
 top_n <- 5
+my_pal <- scales::hue_pal()(top_n)
 highlight_zips <- paste0('ZC_', c('94601', '94621', '94603'))
 pop_min <- 2000
 start_date <- ymd('2021-01-01')
 end_date <- ymd('2021-03-21')
+jpg <- list(w=5, h=2.5, dpi=200)
 
 # 4. do plot 1 ---
 set.seed(1) # for reproducible label placement
@@ -96,10 +98,10 @@ cumul_cases %>%
   xlim(c(start_date, end_date)) +
   scale_y_continuous(labels = scales::comma) +
   scale_size_manual(values = c(0.5,2)) +
-  scale_color_manual(values = c('grey40', scales::hue_pal()(top_n))) +
+  scale_color_manual(values = c('grey40', my_pal)) +
   theme_light() +
   theme(legend.position = 'none')
-ggsave('ousd_covid_cumul.jpg', w=7, h=3, dpi=300)
+ggsave('images/ousd_covid_cumul.jpg', w=jpg$w, h=jpg$h, dpi=jpg$dpi)
 
 # 5. do plot 2 ----
 cumul_cases %>% 
@@ -122,7 +124,7 @@ cumul_cases %>%
   ) +
   
   scale_size_manual(values = c(0.5,2)) +
-  scale_color_manual(values = c('grey40', scales::hue_pal()(top_n))) +
+  scale_color_manual(values = c('grey40', my_pal)) +
   xlim(c(start_date, end_date)) + 
   theme_light() +
   theme(legend.position = 'none') +
@@ -130,5 +132,5 @@ cumul_cases %>%
        subtitle = glue('Excluding zips below {pop_min} population'),
        y='cases per 100k pop',
        x='date')
-ggsave('ousd_covid_rate.jpg', w=7, h=5, dpi=300)
+ggsave('images/ousd_covid_rate.jpg', w=jpg$w, h=jpg$h, dpi=jpg$dpi)
 
