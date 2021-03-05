@@ -73,10 +73,12 @@ highlight_zips <- paste0('ZC_', c('94601', '94621', '94603'))
 pop_min <- 2000
 start_date <- ymd('2021-01-01')
 end_date <- ymd('2021-03-21')
-jpg <- list(w=5, h=2.5, dpi=200)
+jpg <- list(w=7, h=4, dpi=200)
+txt_size <- 8
+label_size <- 2
 
 # 4. do plot 1 ---
-set.seed(1) # for reproducible label placement
+set.seed(123) # for reproducible label placement
 cumul_cases %>% 
   filter(ymd >= start_date) %>%
   ggplot(aes(x=ymd, y=case_rate*1e6, group=name,
@@ -90,7 +92,7 @@ cumul_cases %>%
       filter(ymd == max(ymd),
              name %in% top_zips$name[1:top_n])
     ),
-    hjust=-0.1, size=3,segment.color = 'lightgrey',
+    hjust=-0.5, size=label_size, segment.color = 'lightgrey',
     aes(label= paste0(name, ' (pop ', round(pop/1000,1), 'k)'))
     ) +
   labs(y='cases per 100k pop', x='date', 
@@ -99,7 +101,7 @@ cumul_cases %>%
   scale_y_continuous(labels = scales::comma) +
   scale_size_manual(values = c(0.5,2)) +
   scale_color_manual(values = c('grey40', my_pal)) +
-  theme_light() +
+  theme_light(base_size = txt_size) +
   theme(legend.position = 'none')
 ggsave('images/ousd_covid_cumul.jpg', w=jpg$w, h=jpg$h, dpi=jpg$dpi)
 
@@ -119,14 +121,14 @@ cumul_cases %>%
       group_by(name) %>%
       filter(ymd == max(ymd))
   ),
-  hjust= -0.2, size=3, segment.color = 'lightgrey',
+  hjust= -0.5, size=label_size, segment.color = 'lightgrey',
   aes(label= name)
   ) +
   
   scale_size_manual(values = c(0.5,2)) +
   scale_color_manual(values = c('grey40', my_pal)) +
   xlim(c(start_date, end_date)) + 
-  theme_light() +
+  theme_light(base_size = txt_size) +
   theme(legend.position = 'none') +
   labs(title='OUSD area, rolling 7 day average of new COVID cases by zip',
        subtitle = glue('Excluding zips below {pop_min} population'),

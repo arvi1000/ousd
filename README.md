@@ -19,7 +19,7 @@ If you think of "spread" as _new cases_ rather than cumulative cases, though, it
 
 Alameda county only publishes a snap shot of case rates. If you want the time series, you have to back it out from the cumulative case data. Alameda Co is bigger than just OUSD, so I did a quick and dirty intersection of zips and district to determine 'OUSD adjacent' zips. Map:
 
-![case_rate_avg](images/ousd_zip.jpg)
+![map](images/ousd_zip.jpg)
 
 ## Now what?
 
