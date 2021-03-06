@@ -52,8 +52,8 @@ cumul_cases <- cumul_cases %>%
 # merge pop data, calc case rate
 cumul_cases <- cumul_cases %>%
   merge(zip_pop, by='name') %>%
-  mutate(case_rate = cases/pop,
-         new_cases_7_rate = new_cases_7/pop)
+  mutate(case_rate_100k = cases/(pop/100000),
+         new_cases_7_rate_100k = new_cases_7/(pop/100000))
 
 # subset to just OUSD and adjacent
 cumul_cases_all <- cumul_cases
@@ -66,7 +66,7 @@ cumul_cases <- cumul_cases_all %>%
 top_zips <- cumul_cases %>%
   group_by(name) %>%
   filter(ymd == max(ymd)) %>%
-  arrange(-case_rate)
+  arrange(-case_rate_100k)
 top_n <- 5
 my_pal <- scales::hue_pal()(top_n)
 highlight_zips <- paste0('ZC_', c('94601', '94621', '94603'))
@@ -82,7 +82,7 @@ last_date <- max(cumul_cases$ymd)
 set.seed(123) # for reproducible label placement
 p1 <- cumul_cases %>% 
   filter(ymd >= start_date) %>%
-  ggplot(aes(x=ymd, y=case_rate*1e6, group=name,
+  ggplot(aes(x=ymd, y=case_rate_100k, group=name,
              color = ifelse(name %in% highlight_zips, name, 'exclude'),
              size = name %in% highlight_zips)
          ) +
@@ -110,7 +110,7 @@ p1 <- cumul_cases %>%
 p2 <- cumul_cases %>% 
   filter(ymd >= start_date & pop >= pop_min
          ) %>%
-  ggplot(aes(x=ymd, y=new_cases_7_rate*1e6, group=name,
+  ggplot(aes(x=ymd, y=new_cases_7_rate_100k, group=name,
              color = ifelse(
                name %in% highlight_zips, name, 'exclude'),
              size = name %in% highlight_zips,
@@ -137,9 +137,33 @@ p2 <- cumul_cases %>%
        y='cases per 100k pop',
        x='date')
 
-# 6. save data & plots to file ----
+# 6. last point ----
+p3 <- cumul_cases %>%
+  group_by(name) %>%
+  filter(ymd == last_date, pop >= 2000) %>%
+  select(ymd, name, new_cases_7_rate_100k) %>%
+  arrange(new_cases_7_rate_100k) %>%
+  ggplot(aes(x=fct_inorder(name), y=new_cases_7_rate_100k,
+             fill = ifelse(
+               name %in% highlight_zips, name, 'exclude')
+             )) +
+  geom_col(alpha=0.7) +
+  coord_flip() +
+  scale_fill_manual(values = c('grey40', my_pal)) +
+  labs(
+    title = glue('OUSD area COVID cases by zip. Data for {last_date}'),
+    subtitle = glue('Excluding zips below {pop_min} population'),
+       y='7 day average new cases per 100k',
+       x='ZIP') +
+  scale_y_continuous(breaks=seq(0,14,2)) +
+  theme_light() +
+  theme(legend.position = 'none',
+        panel.grid.major.y = element_blank())
+
+# 7. save data & plots to file ----
 csv_fl <- glue('data/ousd_covid_data_{last_date}.csv')
 write.csv(cumul_cases, csv_fl)
 ggsave('images/ousd_covid_cumul.jpg', plot=p1, w=jpg$w, h=jpg$h, dpi=jpg$dpi)
 ggsave('images/ousd_covid_rate.jpg', plot=p2, w=jpg$w, h=jpg$h, dpi=jpg$dpi)
+ggsave('images/ousd_covid_rate_last_day.jpg', plot=p3, w=5, h=5, dpi=jpg$dpi)
 
