@@ -143,22 +143,36 @@ p3 <- cumul_cases %>%
   filter(ymd == last_date, pop >= 2000) %>%
   select(ymd, name, new_cases_7_rate_100k) %>%
   arrange(new_cases_7_rate_100k) %>%
-  ggplot(aes(x=fct_inorder(name), y=new_cases_7_rate_100k,
-             fill = ifelse(
-               name %in% highlight_zips, name, 'exclude')
-             )) +
-  geom_col(alpha=0.7) +
+  ggplot(aes(x=fct_inorder(name), y=new_cases_7_rate_100k)) +
+  geom_col(aes(fill = ifelse(name %in% highlight_zips, name, 'exclude')),
+           alpha=0.7) +
+  geom_hline(yintercept = c(0, 1, 4, 7, 25), color='grey50') +
+  geom_text(data = tibble(
+    x = c(-2, -1, -2, -1),
+    y = c(0, 1, 4, 7),
+    label = c('Yellow*', 'Orange*', 'Red*', 'Purple*')),
+    aes(x, y, label=label),
+    hjust=-0.1, vjust=-2, size=3) +
+  geom_text(data = tibble(
+    x = c(-2),
+    y = c(25),
+    label = c('Public Health: TK-6 in person**')),
+    aes(x, y, label=label),
+    hjust=1.1, vjust=-2, size=3) +
   coord_flip() +
   scale_fill_manual(values = c('grey40', my_pal)) +
   labs(
-    title = glue('OUSD area COVID cases by zip. Data for {last_date}'),
-    subtitle = glue('Excluding zips below {pop_min} population'),
-       y='7 day average new cases per 100k',
-       x='ZIP') +
-  scale_y_continuous(breaks=seq(0,14,2)) +
+    title = glue('OUSD area COVID cases by zip.'),
+    subtitle = glue('Data for {last_date}'),
+    y='7 day average new cases per 100k',
+    x='ZIP',
+    caption = glue('*CA DPH Tiers\n',
+                   '**CA DPH guidance for TK-6 reopening, 5 consec. days')) +
+  scale_y_continuous(breaks=seq(0,30,5)) +
   theme_light() +
   theme(legend.position = 'none',
-        panel.grid.major.y = element_blank())
+        panel.grid.major.y = element_blank(),
+        panel.grid.minor = element_blank())
 
 # 7. save data & plots to file ----
 csv_fl <- glue('data/ousd_covid_data_{last_date}.csv')

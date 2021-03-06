@@ -15,6 +15,14 @@ If you think of "spread" as _new cases_ rather than cumulative cases, though, it
 
 ![case_rate_avg](images/ousd_covid_rate.jpg)
 
+## Current state vs public health thresholds
+
+Taking just the last date on the chart above, here's the latest rolling 7 day average new cases by zip code, compared to the [CA Dept of Public Health tier system](https://covid19.ca.gov/safer-economy/) and the [recommended threshold for resuming in-person TK-6 instruction](http://bit.ly/ca_school_reopen) of 25/100k.
+
+NB: I believe these tier thresholds are for adjusted case rates, and the chart shows raw case rates.
+
+![cumulative](images/ousd_zip_tiers.jpg)
+
 ## Quick note on data
 
 Alameda county only publishes a snap shot of case rates. If you want the time series, you have to back it out from the cumulative case data. Alameda Co is bigger than just OUSD, so I did a quick and dirty intersection of zips and district to determine 'OUSD adjacent' zips. Map:
