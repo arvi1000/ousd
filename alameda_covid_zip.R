@@ -76,8 +76,9 @@ end_date <- ymd('2021-03-21')
 jpg <- list(w=7, h=4, dpi=200)
 txt_size <- 8
 label_size <- 2
+last_date <- max(cumul_cases$ymd)
 
-# 4. do plot 1 ---
+# 4. do plot 1 ----
 set.seed(123) # for reproducible label placement
 p1 <- cumul_cases %>% 
   filter(ymd >= start_date) %>%
@@ -96,14 +97,14 @@ p1 <- cumul_cases %>%
     aes(label= paste0(name, ' (pop ', round(pop/1000,1), 'k)'))
     ) +
   labs(y='cases per 100k pop', x='date', 
-       title='OUSD Area Cumulative Covid Case Rate by Zip') +
+       title='OUSD Area Cumulative Covid Case Rate by Zip',
+       subtitle = glue('Data thru {last_date}')) +
   xlim(c(start_date, end_date)) +
   scale_y_continuous(labels = scales::comma) +
   scale_size_manual(values = c(0.5,2)) +
   scale_color_manual(values = c('grey40', my_pal)) +
   theme_light(base_size = txt_size) +
   theme(legend.position = 'none')
-ggsave(p1, 'images/ousd_covid_cumul.jpg', w=jpg$w, h=jpg$h, dpi=jpg$dpi)
 
 # 5. do plot 2 ----
 p2 <- cumul_cases %>% 
@@ -131,8 +132,14 @@ p2 <- cumul_cases %>%
   theme_light(base_size = txt_size) +
   theme(legend.position = 'none') +
   labs(title='OUSD area, rolling 7 day average of new COVID cases by zip',
-       subtitle = glue('Excluding zips below {pop_min} population'),
+       subtitle = glue('Excluding zips below {pop_min} population. ',
+                       'Data thru {last_date}'),
        y='cases per 100k pop',
        x='date')
-ggsave(p2, 'images/ousd_covid_rate.jpg', w=jpg$w, h=jpg$h, dpi=jpg$dpi)
+
+# 6. save data & plots to file ----
+csv_fl <- glue('data/ousd_covid_data_{last_date}.csv')
+write.csv(cumul_cases, csv_fl)
+ggsave('images/ousd_covid_cumul.jpg', plot=p1, w=jpg$w, h=jpg$h, dpi=jpg$dpi)
+ggsave('images/ousd_covid_rate.jpg', plot=p2, w=jpg$w, h=jpg$h, dpi=jpg$dpi)
 

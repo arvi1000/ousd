@@ -4,8 +4,8 @@ library(tigris)
 library(sf)
 
 # get shapefiles (add cb=T for coarse resolution)
-sd_sf <- school_districts(state = 'CA')
-zip_sf <- zctas(state='CA')
+sd_sf <- school_districts(state = 'CA', cb=T)
+zip_sf <- zctas(state='CA', cb=T)
 
 # which zips overlap OUSD?
 ousd_sf <- sd_sf[grep('Oakland', sd_sf$NAME), ] 
