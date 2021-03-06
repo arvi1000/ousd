@@ -137,47 +137,9 @@ p2 <- cumul_cases %>%
        y='cases per 100k pop',
        x='date')
 
-# 6. last point ----
-p3 <- cumul_cases %>%
-  group_by(name) %>%
-  filter(ymd == last_date, pop >= 2000) %>%
-  select(ymd, name, new_cases_7_rate_100k) %>%
-  arrange(new_cases_7_rate_100k) %>%
-  ggplot(aes(x=fct_inorder(name), y=new_cases_7_rate_100k)) +
-  geom_col(aes(fill = ifelse(name %in% highlight_zips, name, 'exclude')),
-           alpha=0.7) +
-  geom_hline(yintercept = c(0, 1, 4, 7, 25), color='grey50') +
-  geom_text(data = tibble(
-    x = c(-2, -1, -2, -1),
-    y = c(0, 1, 4, 7),
-    label = c('Yellow*', 'Orange*', 'Red*', 'Purple*')),
-    aes(x, y, label=label),
-    hjust=-0.1, vjust=-2, size=3) +
-  geom_text(data = tibble(
-    x = c(-2),
-    y = c(25),
-    label = c('Public Health: TK-6 in person**')),
-    aes(x, y, label=label),
-    hjust=1.1, vjust=-2, size=3) +
-  coord_flip() +
-  scale_fill_manual(values = c('grey40', my_pal)) +
-  labs(
-    title = glue('OUSD area COVID cases by zip.'),
-    subtitle = glue('Data for {last_date}'),
-    y='7 day average new cases per 100k',
-    x='ZIP',
-    caption = glue('*CA DPH Tiers\n',
-                   '**CA DPH guidance for TK-6 reopening, 5 consec. days')) +
-  scale_y_continuous(breaks=seq(0,30,5)) +
-  theme_light() +
-  theme(legend.position = 'none',
-        panel.grid.major.y = element_blank(),
-        panel.grid.minor = element_blank())
-
-# 7. save data & plots to file ----
+# 6. save data & plots to file ----
 csv_fl <- glue('data/ousd_covid_data_{last_date}.csv')
 write.csv(cumul_cases, csv_fl)
 ggsave('images/ousd_covid_cumul.jpg', plot=p1, w=jpg$w, h=jpg$h, dpi=jpg$dpi)
 ggsave('images/ousd_covid_rate.jpg', plot=p2, w=jpg$w, h=jpg$h, dpi=jpg$dpi)
-ggsave('images/ousd_covid_rate_last_day.jpg', plot=p3, w=5, h=5, dpi=jpg$dpi)
 
