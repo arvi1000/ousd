@@ -23,6 +23,10 @@ NB: I believe these tier thresholds are for adjusted case rates, and the chart s
 
 ![cumulative](images/ousd_zip_tiers.jpg)
 
+And over the last 14 days of available data:
+
+![cumulative](images/ousd_zip_tiers_14days.jpg)
+
 ## Quick note on data
 
 Alameda county only publishes a snap shot of case rates. If you want the time series, you have to back it out from the cumulative case data. Alameda Co is bigger than just OUSD, so I did a quick and dirty intersection of zips and district to determine 'OUSD adjacent' zips. Map:
