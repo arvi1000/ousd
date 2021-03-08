@@ -98,7 +98,7 @@ cumul_cases %>%
     title = glue('OUSD-area COVID cases by zip vs CA Public Health Tiers'),
     subtitle = glue('Two weeks through {last_date}'),
     y='7 day average new cases per 100k',
-    x='ZIP',
+    x='date',
     caption = glue('CA DPH Tiers (https://covid19.ca.gov/safer-economy)\n',
                    'CA DPH guidance for TK-6 reopening, 5 consec. days (http://bit.ly/ca_school_reopen, p8)')) +
   scale_y_continuous(breaks=seq(0,30,5), limits = c(0, 30)) +
