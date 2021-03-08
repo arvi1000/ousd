@@ -56,10 +56,13 @@ cumul_cases <- cumul_cases %>%
          new_cases_7_rate_100k = new_cases_7/(pop/100000))
 
 # subset to just OUSD and adjacent
+# this csv written out by oakland_zips.R
+ousd_area_zips <- read.csv('ousd_area_zips.csv',
+                           colClasses = 'character',
+                           stringsAsFactors = F)
 cumul_cases_all <- cumul_cases
 cumul_cases <- cumul_cases_all %>%
-  # ousd_zips from oakland_zips.R
-  filter(gsub('ZC_', '', name) %in% ousd_zips$ZCTA5CE10)
+  filter(gsub('ZC_', '', name) %in% ousd_area_zips$ousd_zips)
 
 # 3. plot params ----
 # top zips as of max date
@@ -136,6 +139,10 @@ p2 <- cumul_cases %>%
                        'Data thru {last_date}'),
        y='cases per 100k pop',
        x='date')
+
+# show plots
+p1
+p2
 
 # 6. save data & plots to file ----
 csv_fl <- glue('data/ousd_covid_data_{last_date}.csv')

@@ -12,6 +12,12 @@ ousd_sf <- sd_sf[grep('Oakland', sd_sf$NAME), ]
 oakland_zip_indexes <- which(sapply(st_overlaps(zip_sf, ousd_sf), length) > 0)
 ousd_zips <- zip_sf[oakland_zip_indexes, ]
 
+# print the zips
+sort(ousd_zips$ZCTA5CE10)
+write.csv(data.frame(ousd_zips=ousd_zips$ZCTA5CE10, stringsAsFactors = F),
+          'ousd_area_zips.csv', 
+          row.names = F)
+
 highlight <- c('94601', '94621', '94603')
 map_pal <- c('white', scales::hue_pal()(5))
 
@@ -29,6 +35,4 @@ ggplot() +
        fill='zip')
 ggsave('images/ousd_zip.jpg', w=7, h=5, dpi = 300)
 
-# print the zips
-sort(ousd_zips$ZCTA5CE10)
 
