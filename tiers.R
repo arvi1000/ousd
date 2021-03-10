@@ -99,8 +99,9 @@ cumul_cases %>%
     subtitle = glue('Two weeks through {last_date}'),
     y='7 day average new cases per 100k',
     x='date',
-    caption = glue('CA DPH Tiers (https://covid19.ca.gov/safer-economy)\n',
-                   'CA DPH guidance for TK-6 reopening, 5 consec. days (http://bit.ly/ca_school_reopen, p8)')) +
+    caption = glue(
+      'CA DPH Tiers: https://covid19.ca.gov/safer-economy\n',
+      '25/100k guidance for TK-6 reopening, 5 consec. days: http://bit.ly/ca_school_reopen, p8')) +
   scale_y_continuous(breaks=seq(0,30,5), limits = c(0, 30)) +
   theme_light() +
   theme(legend.position = 'none',

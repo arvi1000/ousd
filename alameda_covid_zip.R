@@ -74,12 +74,13 @@ top_n <- 5
 my_pal <- scales::hue_pal()(top_n)
 highlight_zips <- paste0('ZC_', c('94601', '94621', '94603'))
 pop_min <- 2000
+last_date <- max(cumul_cases$ymd)
 start_date <- ymd('2021-01-01')
-end_date <- ymd('2021-03-21')
+end_date <- last_date + 16
 jpg <- list(w=7, h=4, dpi=200)
 txt_size <- 8
 label_size <- 2
-last_date <- max(cumul_cases$ymd)
+
 
 # 4. do plot 1 ----
 set.seed(123) # for reproducible label placement
