@@ -18,7 +18,9 @@ zip_pop <- zip_rate_json$features$attributes %>%
 # cumulative case count data
 # "Alameda County COVID-19 Daily Cumulative Cases by City, Place and Zip Code"
 # https://data.acgov.org/datasets/5d6bf4760af64db48b6d053e7569a47b_3
-cumul_json <- fromJSON('https://opendata.arcgis.com/datasets/5d6bf4760af64db48b6d053e7569a47b_3.geojson')
+cumul_json <- fromJSON(
+  #'https://opendata.arcgis.com/datasets/5d6bf4760af64db48b6d053e7569a47b_3.geojson'
+  'https://opendata.arcgis.com/datasets/5d6bf4760af64db48b6d053e7569a47b_6.geojson')
 # select relevant fields, format dates
 cumul_cases_wide <- 
   cumul_json$features$properties %>%
