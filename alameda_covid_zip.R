@@ -152,7 +152,7 @@ p2_last_14 <- p2 +
 
 # 6. save data & plots to file ----
 csv_fl <- glue('data/ousd_covid_data_{last_date}.csv')
-write.csv(cumul_cases, csv_fl)
+write.csv(cumul_cases, csv_fl, row.names = F)
 ggsave('images/ousd_covid_cumul.jpg', plot=p1, w=jpg$w, h=jpg$h, dpi=jpg$dpi)
 ggsave('images/ousd_covid_rate.jpg', plot=p2, w=jpg$w, h=jpg$h, dpi=jpg$dpi)
 #ggsave('images/ousd_covid_rate_last14.jpg', plot=p2_last_14, w=jpg$w, h=jpg$h, dpi=jpg$dpi)
