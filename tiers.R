@@ -13,31 +13,38 @@ tier_clrs <- list(
 )
 anno_text_clr <- 'grey30'
 
+tier_thresh <- list(
+  yellow = c(0, 2),
+  orange = c(2, 6),
+  red = c(6, 10),
+  purple = c(10, 25),
+  beyond = c(25, 30)
+)
+
 # plot 1 ----
 single_day_dat %>%
   ggplot(aes(x=fct_inorder(name), y=new_cases_7_rate_100k)) +
   # tiers
-  geom_rect(ymin = 0, ymax = 1, xmin =-Inf, xmax= Inf,
-            fill = tier_clrs$yellow) +
-  geom_rect(ymin = 1, ymax = 4, xmin =-Inf, xmax= Inf,
-            fill = tier_clrs$orange) +
-  geom_rect(ymin = 4, ymax = 7, xmin =-Inf, xmax= Inf,
-            fill = tier_clrs$red) +
-  geom_rect(ymin = 7, ymax = 25, xmin =-Inf, xmax= Inf,
-            fill = tier_clrs$purple) +
-  geom_rect(ymin = 25, ymax = 30, xmin =-Inf, xmax= Inf,
-            fill = tier_clrs$beyond) +
+  geom_rect(ymin = tier_thresh$yellow[1], ymax = tier_thresh$yellow[2], 
+            xmin =-Inf, xmax= Inf, fill = tier_clrs$yellow) +
+  geom_rect(ymin = tier_thresh$orange[1], ymax = tier_thresh$orange[2], 
+            xmin =-Inf, xmax= Inf, fill = tier_clrs$orange) +
+  geom_rect(ymin = tier_thresh$red[1], ymax = tier_thresh$red[2], 
+            xmin =-Inf, xmax= Inf, fill = tier_clrs$red) +
+  geom_rect(ymin = tier_thresh$purple[1], ymax = tier_thresh$purple[2], 
+            xmin =-Inf, xmax= Inf, fill = tier_clrs$purple) +
+  geom_rect(ymin = tier_thresh$beyond[1], ymax = tier_thresh$beyond[2], 
+            xmin =-Inf, xmax= Inf, fill = tier_clrs$beyond) +
   geom_col(fill='grey50') +
-  geom_hline(yintercept = c(0, 1, 4, 7, 25), color='grey50') +
   geom_text(data = tibble(
     x = c(-2, -1, -2, -1),
-    y = c(0, 1, 4, 7),
+    y = with(tier_thresh, c(yellow[1], orange[1], red[1], purple[1])),
     label = c('Yellow*', 'Orange*', 'Red*', 'Purple*')),
     aes(x, y, label=label),
     hjust=-0.1, vjust=-2, size=3, color=anno_text_clr) +
   geom_text(data = tibble(
     x = c(-2),
-    y = c(25),
+    y = tier_thresh$beyond[1],
     label = c('Public Health: TK-6 in person**')),
     aes(x, y, label=label),
     hjust=1, vjust=-2, size=3, color=anno_text_clr) +
@@ -66,16 +73,16 @@ cumul_cases %>%
   ggplot() +
   
   # tiers
-  geom_rect(ymin = 0, ymax = 1, xmin =-Inf, xmax= Inf,
-            fill = tier_clrs$yellow) +
-  geom_rect(ymin = 1, ymax = 4, xmin =-Inf, xmax= Inf,
-            fill = tier_clrs$orange) +
-  geom_rect(ymin = 4, ymax = 7, xmin =-Inf, xmax= Inf,
-            fill = tier_clrs$red) +
-  geom_rect(ymin = 7, ymax = 25, xmin =-Inf, xmax= Inf,
-            fill = tier_clrs$purple) +
-  geom_rect(ymin = 25, ymax = 30, xmin =-Inf, xmax= Inf,
-            fill = tier_clrs$beyond) +
+  geom_rect(ymin = tier_thresh$yellow[1], ymax = tier_thresh$yellow[2], 
+            xmin =-Inf, xmax= Inf, fill = tier_clrs$yellow) +
+  geom_rect(ymin = tier_thresh$orange[1], ymax = tier_thresh$orange[2], 
+            xmin =-Inf, xmax= Inf, fill = tier_clrs$orange) +
+  geom_rect(ymin = tier_thresh$red[1], ymax = tier_thresh$red[2], 
+            xmin =-Inf, xmax= Inf, fill = tier_clrs$red) +
+  geom_rect(ymin = tier_thresh$purple[1], ymax = tier_thresh$purple[2], 
+            xmin =-Inf, xmax= Inf, fill = tier_clrs$purple) +
+  geom_rect(ymin = tier_thresh$beyond[1], ymax = tier_thresh$beyond[2], 
+            xmin =-Inf, xmax= Inf, fill = tier_clrs$beyond) +
   
   # data
   geom_line(aes(x=ymd, y=new_cases_7_rate_100k, group=name),
@@ -84,12 +91,13 @@ cumul_cases %>%
   # annotation
   geom_text(data = tibble(
     x = last_date + rep(1, 5),
-    y = c(mean(c(0,1)), 
-          mean(c(1,4)), 
-          mean(c(4,7)),
-          mean(c(7,25)), 
-          mean(c(25,30))
-          ),
+    y = with(tier_thresh, 
+             c(mean(yellow), 
+               mean(orange), 
+               mean(red), 
+               mean(purple), 
+               mean(beyond))
+             ),
     label = c('Yellow', 'Orange', 'Red', 'Purple', "No TK-6\nin person")),
     aes(x, y, label=label),
     fontface='italic', 
